@@ -2,7 +2,8 @@ package eu.heha.duplicatesfinder.model
 
 object DuplicateFinder {
 
-    private val charsToIgnore = arrayOf("(", ")", " ", "_", "-", ".")
+    private val charsToIgnore = arrayOf("(", ")", " ", "_", "-", ".", ",")
+    private val numbersInParenthesis = Regex("\\([0-9]+\\)")
 
     /**
      * recursively looks up [path] for duplicates with same name and maybe different file endings
@@ -24,17 +25,26 @@ object DuplicateFinder {
             }
         } else {
             val baseName = path.getBaseName()
-            duplicatesMap[baseName] =
-                duplicatesMap.getOrElse(baseName) { listOf() } + path
+            if (baseName.isBlank()) return
+            duplicatesMap[baseName] = duplicatesMap.getOrElse(baseName) { listOf() } + path
         }
     }
 
-    private fun PathWithMetaData.getBaseName(): String {
-        val name = path.toString()
-        val lastDotIndex = name.lastIndexOf('.')
-        val nameWithoutEnding =  if (lastDotIndex == -1) name else name.substring(0, lastDotIndex)
-        return charsToIgnore.fold(nameWithoutEnding) { acc, char ->
-            acc.replace(char, "")
-        }
+    private fun PathWithMetaData.getBaseName(): String = path.toString()
+        .removeFileEnding()
+        .removeNumbersInParentheses()
+        .removeUnwantedChars()
+
+    private fun String.removeFileEnding(): String {
+        val lastDotIndex = this.lastIndexOf('.')
+        val nameWithoutEnding = if (lastDotIndex == -1) this else this.substring(0, lastDotIndex)
+        return nameWithoutEnding
     }
+
+    private fun String.removeNumbersInParentheses(): String =
+        numbersInParenthesis.replace(this, "")
+
+    private fun String.removeUnwantedChars(): String =
+        charsToIgnore.fold(this) { acc, char -> acc.replace(char, "") }
 }
+
