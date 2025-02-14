@@ -1,0 +1,5 @@
+<resources>
+    <string name="folder_selection_title">Duplicates Finder</string>
+    <string name="folder_selection_input_label">Path to scan</string>
+    <string name="folder_selection_use_folder_action">Use Folder</string>
+</resources>
