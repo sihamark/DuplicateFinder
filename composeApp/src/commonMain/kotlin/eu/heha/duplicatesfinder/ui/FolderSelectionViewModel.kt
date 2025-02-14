@@ -1,10 +1,11 @@
-package eu.heha.duplicatesfinder
+package eu.heha.duplicatesfinder.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import eu.heha.duplicatesfinder.model.PathWithMetaData
 import kotlinx.coroutines.launch
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
@@ -22,10 +23,8 @@ class FolderSelectionViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 state = state.copy(isScanning = true)
-                val metaData = SystemFileSystem.metadataOrNull(Path(state.path))
-                state = if (metaData == null) {
-                    state.copy(isScanning = false, error = "Path does not exist")
-                } else if (!metaData.isDirectory) {
+                val path = PathWithMetaData(state.path)
+                state = if (!path.isDirectory) {
                     state.copy(isScanning = false, error = "Path is not a directory")
                 } else {
                     state.copy(isScanning = false, isSuccess = true, error = "")

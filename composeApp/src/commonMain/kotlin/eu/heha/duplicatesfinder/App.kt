@@ -8,6 +8,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
+import eu.heha.duplicatesfinder.model.PathWithMetaData
+import eu.heha.duplicatesfinder.ui.FolderSelectionViewModel
+import eu.heha.duplicatesfinder.ui.DuplicatesResolutionPane
+import eu.heha.duplicatesfinder.ui.DuplicatesResolutionViewModel
+import eu.heha.duplicatesfinder.ui.FolderSelectionPane
 import kotlinx.io.files.Path
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -21,7 +26,7 @@ fun App() {
                 val model = viewModel { FolderSelectionViewModel() }
                 LaunchedEffect(model.state.isSuccess) {
                     if (model.state.isSuccess) {
-                        navEntry = NavEntry.ScanResult(Path(model.state.path))
+                        navEntry = NavEntry.DuplicateResolution(PathWithMetaData(model.state.path))
                         model.reset()
                     }
                 }
@@ -32,16 +37,16 @@ fun App() {
                 )
             }
 
-            is NavEntry.ScanResult -> {
-                val model = viewModel { ScanResultViewModel(entry.path) }
+            is NavEntry.DuplicateResolution -> {
+                val model = viewModel { DuplicatesResolutionViewModel() }
                 LaunchedEffect(model) {
-                    model.findDuplicates()
+                    model.findDuplicates(entry.path)
                 }
-                ScanResultPane(
+                DuplicatesResolutionPane(
                     state = model.state,
                     onSelectPath = model::selectPath,
                     onClickClearSelection = model::clearSelection,
-                    onClickDeleteSelected = model::deleteNotSelected,
+                    onClickResolveDuplicates = model::deleteNotSelected,
                     onClickSelectBest = model::selectBest,
                     onClickBack = { navEntry = NavEntry.FolderSelection }
                 )
@@ -52,5 +57,5 @@ fun App() {
 
 sealed interface NavEntry {
     data object FolderSelection : NavEntry
-    data class ScanResult(val path: Path) : NavEntry
+    data class DuplicateResolution(val path: PathWithMetaData) : NavEntry
 }

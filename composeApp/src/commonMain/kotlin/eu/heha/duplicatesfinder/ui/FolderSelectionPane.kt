@@ -1,4 +1,4 @@
-package eu.heha.duplicatesfinder
+package eu.heha.duplicatesfinder.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

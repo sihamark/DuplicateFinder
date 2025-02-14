@@ -2,4 +2,16 @@
     <string name="folder_selection_title">Duplicates Finder</string>
     <string name="folder_selection_input_label">Path to scan</string>
     <string name="folder_selection_use_folder_action">Use Folder</string>
+
+    <string name="duplicates_resolution_title">Scan Result</string>
+    <string name="duplicates_resolution_back_action_description">Back</string>
+    <string name="duplicates_resolution_no_duplicates_found_message">No duplicates found in folder '%1$s'</string>
+    <string name="duplicates_resolution_to_folder_selection_action">To Folder Selection</string>
+    <string name="duplicates_resolution_select_best_action">Select Best</string>
+    <string name="duplicates_resolution_clear_selection_action">Clear Selection</string>
+    <string name="duplicates_resolution_resolve_duplicates_action">Resolve (%1$d) Duplicates</string>
+    <string name="duplicates_resolution_resolving_duplicates_message">Resolving Duplicates</string>
+    <string name="duplicates_resolution_folder_expand_action_description">Expand Folder</string>
+    <string name="duplicates_resolution_folder_collapse_action_description">Collapse Folder</string>
+    <string name="duplicates_resolution_scanning_message">Scanning for duplicates</string>
 </resources>
